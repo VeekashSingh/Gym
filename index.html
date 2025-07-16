@@ -15,64 +15,233 @@
             --glow-strength: 0 0 10px var(--color-purple-glow), 0 0 20px var(--color-purple-main);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Rajdhani', sans-serif; line-height: 1.6; color: var(--color-light-grey); background-color: var(--color-dark-bg); padding: 20px; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .container { max-width: 900px; width: 100%; background-color: var(--color-medium-dark-bg); border-radius: 12px; box-shadow: var(--glow-strength); padding: 30px; margin-bottom: 20px; border: 1px solid var(--color-purple-main); animation: fadeInSlideUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--color-purple-main); padding-bottom: 20px; }
-        header h1 { font-family: 'Orbitron', sans-serif; font-size: 3em; color: var(--color-purple-glow); text-shadow: var(--glow-strength); }
-        header .user-rank { font-family: 'Orbitron', sans-serif; font-size: 1.5em; color: var(--color-orange-accent); margin: 10px 0; }
-        header .current-date { font-size: 1.2em; color: var(--color-purple-main); }
-        header .goal, header .note { font-size: 1em; color: var(--color-text-faded); margin-top: 8px; }
-        .btn-base { background-color: var(--color-blue-accent); color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-family: 'Montserrat', sans-serif; transition: all 0.3s ease; }
-        .btn-base:hover { transform: translateY(-2px); box-shadow: var(--glow-strength); }
-        section { margin-bottom: 35px; background-color: var(--color-card-bg); padding: 25px; border-radius: 10px; border: 1px solid rgba(var(--color-purple-main), 0.5); }
-        section h2 { font-family: 'Montserrat', sans-serif; font-size: 2em; color: var(--color-purple-glow); margin-bottom: 25px; border-bottom: 2px solid var(--color-purple-main); padding-bottom: 10px; }
-        .day-card { background-color: var(--color-medium-dark-bg); padding: 20px; border-radius: 10px; border: 1px solid #1a1a2e; }
-        .day-card.active-day { border: 2px solid var(--color-purple-main); box-shadow: var(--glow-strength); }
-        body:not(.show-all-days) .day-card:not(.active-day) { display: none; }
-        .day-card h3 { font-family: 'Montserrat', sans-serif; font-size: 1.7em; color: var(--color-orange-accent); }
-        .workout-details h4 { font-size: 1.3em; color: var(--color-green-accent); margin-top: 20px; border-left: 3px solid var(--color-green-accent); padding-left: 10px; margin-bottom: 10px; }
-        ul { list-style: none; padding-left: 0; }
-        ul li { margin-bottom: 12px; display: flex; align-items: center; flex-wrap: wrap; background-color: #2a2a4a; padding: 12px 15px; border-radius: 6px; gap: 10px; }
-        ul.checklist li.completed { background-color: rgba(var(--color-green-accent), 0.1); }
-        ul.checklist li.completed span { text-decoration: line-through; color: var(--color-text-faded); }
-        label { display: flex; align-items: center; cursor: pointer; flex-grow: 1; }
-        input[type="checkbox"] { appearance: none; width: 22px; height: 22px; border: 2px solid var(--color-purple-main); border-radius: 4px; margin-right: 12px; position: relative; flex-shrink: 0; }
-        input[type="checkbox"]:checked { background-color: var(--color-green-accent); border-color: var(--color-green-accent); }
-        input[type="checkbox"]:checked::after { content: '✔'; color: white; font-size: 14px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .exercise-log-inputs { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-        .exercise-log-inputs input, .calorie-input-group input { padding: 6px; border-radius: 5px; border: 1px solid var(--color-purple-main); background-color: var(--color-medium-dark-bg); color: var(--color-light-grey); text-align: center; }
-        .exercise-log-inputs input[data-type="weight"] { width: 65px; }
-        .exercise-log-inputs input[data-type="sets"], .exercise-log-inputs input[data-type="reps"] { width: 50px; }
-        .beasts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .beast-card { background-color: var(--color-medium-dark-bg); padding: 15px; text-align: center; border-radius: 8px; }
-        .beast-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
-        .beast-card h3 { color: var(--color-orange-accent); }
-        .beast-card .beast-rank { color: var(--color-purple-glow); margin-bottom: 15px; }
-        .beast-card .btn-attack:disabled { background-color: #555; cursor: not-allowed; }
-        .streak-counter { font-family: 'Orbitron', sans-serif; font-size: 4.5em; color: var(--color-green-accent); text-shadow: 0 0 15px rgba(var(--color-green-accent), 0.8); z-index: 2; position: relative; }
-        .weight-progress-section .last-weight-display, .calorie-tracking-section .calories-display { font-size: 1.1em; color: var(--color-purple-glow); text-align: center; margin-bottom: 15px; }
-        .weight-input-group, .calorie-input-group { display: flex; justify-content: center; gap: 10px; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .calendar-day { padding: 10px 5px; border-radius: 5px; background-color: var(--color-medium-dark-bg); }
-        .calendar-day.today { border: 2px solid var(--color-purple-glow); }
-        .calendar-day.trained { background-color: rgba(var(--color-green-accent), 0.2); }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .workout-exercise-details { color: var(--color-text-faded); font-size: 0.9em; flex-basis: 100%; padding-left: 34px; }
-        @keyframes fadeInSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .streak-section { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
-        .fire-container { position: absolute; bottom: -50px; width: 150px; height: 150px; filter: blur(2px) contrast(1.5); --flame-color-1: #ff4000; --flame-color-2: #ffc300; --flame-duration: 1s; }
-        .flame { position: absolute; bottom: 0; left: 50%; width: 8px; height: 8px; background: var(--flame-color-1); border-radius: 50%; box-shadow: 0 0 40px 5px var(--flame-color-1), 0 0 10px 5px var(--flame-color-2); animation: fire var(--flame-duration) infinite linear; }
-        .flame:nth-child(2) { animation-delay: 0.2s; left: 40%; } .flame:nth-child(3) { animation-delay: 0.5s; left: 60%; } .flame:nth-child(4) { animation-delay: 0.8s; left: 45%; } .flame:nth-child(5) { animation-delay: 1s; left: 55%; }
-        @keyframes fire { 0% { transform: translateY(0) scale(1); opacity: 1; } 50% { opacity: 0.8; } 100% { transform: translateY(-120px) scale(3); opacity: 0; } }
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            line-height: 1.6; 
+            color: var(--color-light-grey); 
+            background-color: var(--color-dark-bg); 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+        }
+        .container { 
+            max-width: 900px; 
+            width: 100%; 
+            background-color: var(--color-medium-dark-bg); 
+            border-radius: 12px; 
+            box-shadow: var(--glow-strength); 
+            padding: 30px; 
+            margin-bottom: 20px; 
+            border: 1px solid var(--color-purple-main); 
+            animation: fadeInSlideUp 0.8s ease-out forwards; 
+            opacity: 0; 
+            transform: translateY(20px); 
+        }
+        header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            border-bottom: 2px solid var(--color-purple-main); 
+            padding-bottom: 20px; 
+        }
+        header h1 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 3em; 
+            color: var(--color-purple-glow); 
+            text-shadow: var(--glow-strength); 
+        }
+        header .user-rank { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 1.5em; 
+            color: var(--color-orange-accent); 
+            margin: 10px 0; 
+        }
+        header .current-date { 
+            font-size: 1.2em; 
+            color: var(--color-purple-main); 
+        }
+        header .goal, header .note { 
+            font-size: 1em; 
+            color: var(--color-text-faded); 
+            margin-top: 8px; 
+        }
+        .btn-base { 
+            background-color: var(--color-blue-accent); 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 1em; 
+            font-family: 'Montserrat', sans-serif; 
+            transition: all 0.3s ease; 
+        }
+        .btn-base:hover { 
+            transform: translateY(-2px); 
+            box-shadow: var(--glow-strength); 
+        }
+        section { 
+            margin-bottom: 35px; 
+            background-color: var(--color-card-bg); 
+            padding: 25px; 
+            border-radius: 10px; 
+            border: 1px solid rgba(var(--color-purple-main), 0.5); 
+        }
+        section h2 { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 2em; 
+            color: var(--color-purple-glow); 
+            margin-bottom: 25px; 
+            border-bottom: 2px solid var(--color-purple-main); 
+            padding-bottom: 10px; 
+        }
+        .day-card { 
+            background-color: var(--color-medium-dark-bg); 
+            padding: 20px; 
+            border-radius: 10px; 
+            border: 1px solid #1a1a2e; 
+        }
+        .day-card.active-day { 
+            border: 2px solid var(--color-purple-main); 
+            box-shadow: var(--glow-strength); 
+        }
+        body:not(.show-all-days) .day-card:not(.active-day) { 
+            display: none; 
+        }
+        .day-card h3 { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 1.7em; 
+            color: var(--color-orange-accent); 
+        }
+        .workout-details h4 { 
+            font-size: 1.3em; 
+            color: var(--color-green-accent); 
+            margin-top: 20px; 
+            border-left: 3px solid var(--color-green-accent); 
+            padding-left: 10px; 
+            margin-bottom: 10px; 
+        }
+        ul { 
+            list-style: none; 
+            padding-left: 0; 
+        }
+        ul li { 
+            margin-bottom: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            background-color: #2a2a4a; 
+            padding: 12px 15px; 
+            border-radius: 6px; 
+            gap: 5px; 
+            min-height: 40px; 
+        }
+        ul.checklist li.completed { 
+            background-color: rgba(var(--color-green-accent), 0.1); 
+        }
+        ul.checklist li.completed span { 
+            text-decoration: line-through; 
+            color: var(--color-text-faded); 
+        }
+        .exercise-item-header { 
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .exercise-item-header span {
+            font-size: 1.1em; 
+            font-weight: bold;
+            color: var(--color-light-grey); 
+            flex-grow: 1; 
+        }
+        /* Checkbox styling */
+        input[type="checkbox"] { 
+            appearance: none; 
+            width: 22px; 
+            height: 22px; 
+            border: 2px solid var(--color-purple-main); 
+            border-radius: 4px; 
+            margin-right: 12px; 
+            position: relative; 
+            flex-shrink: 0; 
+        }
+        input[type="checkbox"]:checked { 
+            background-color: var(--color-green-accent); 
+            border-color: var(--color-green-accent); 
+        }
+        input[type="checkbox"]:checked::after { 
+            content: '✔'; 
+            color: white; 
+            font-size: 14px; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+        }
+        .exercise-log-inputs { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            width: 100%; 
+            margin-top: 0; 
+            justify-content: flex-end; 
+        }
+        .exercise-log-inputs input { 
+            padding: 6px; 
+            border-radius: 5px; 
+            border: 1px solid var(--color-purple-main); 
+            background-color: var(--color-medium-dark-bg); 
+            color: var(--color-light-grey); 
+            text-align: center; 
+        }
+        .exercise-log-inputs input[data-type="weight"] { 
+            width: 65px; 
+        }
+        .exercise-log-inputs input[data-type="sets"], 
+        .exercise-log-inputs input[data-type="reps"] { 
+            width: 50px; 
+        }
+
+        /* CSS for multi-line notes within workout-exercise-details */
+        .workout-exercise-details {
+            color: var(--color-text-faded); 
+            font-size: 0.9em; 
+            width: 100%; 
+            padding-left: 0; 
+            margin-top: 0; 
+        }
+        .workout-exercise-details ul {
+            list-style: disc; 
+            padding-left: 20px;
+            margin-top: 5px;
+            color: var(--color-text-faded);
+            text-align: left; 
+        }
+
+        .workout-exercise-details ul li {
+            background-color: transparent; 
+            padding: 0;
+            margin-bottom: 5px;
+            display: list-item; 
+            white-space: normal; 
+            flex-direction: row; 
+            align-items: flex-start;
+        }
+        
+        @keyframes fadeInSlideUp { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>⚔️ Solo Leveling Training Log</h1>
-            <h2 class="user-rank" id="userRank">Loading...</h2>
+            <h2 class="user-rank" id="userTotalXp">Total XP: 0</h2>
             <p class="current-date"></p>
-            <p class="goal"><strong>Goal:</strong> Reach <strong>70kg</strong></p>
+            <p class="goal"><strong>Goal:</strong> Level Up!</p>
             <p class="note" id="systemQuote">"Arise."</p>
             <div class="header-actions">
                 <button id="toggleDayView" class="btn-base">Show All Days</button>
@@ -82,31 +251,22 @@
         <section class="daily-routine">
             <h2>⏰ Daily Quest</h2>
             <ul id="dailyTaskList" class="checklist">
-                <li data-task-id="meditation"><label><input type="checkbox"><span>Meditation</span></label></li>
-                <li data-task-id="injury_warmup"><label><input type="checkbox"><span>Injury Prevention & Warm-up</span></label></li>
-                <li data-task-id="punches_kicks"><label><input type="checkbox"><span>100 Punches / 100 Kicks</span></label></li>
-                <li data-task-id="pushups"><label><input type="checkbox"><span>100 Push-ups</span></label></li>
-                <li data-task-id="run_1km"><label><input type="checkbox"><span>1km Run</span></label></li>
-                <li data-task-id="water_3l"><label><input type="checkbox"><span>Drink 3 Litres of Water</span></label></li>
+                <li data-task-id="meditation" data-xp-reward="10"><label><input type="checkbox"><span>Meditation</span></label></li>
+                <li data-task-id="injury_warmup" data-xp-reward="10"><label><input type="checkbox"><span>Injury Prevention & Warm-up</span></label></li>
+                <li data-task-id="punches_kicks" data-xp-reward="20"><label><input type="checkbox"><span>100 Punches / 100 Kicks</span></label></li>
+                <li data-task-id="pushups" data-xp-reward="20"><label><input type="checkbox"><span>100 Push-ups</span></label></li>
+                <li data-task-id="run_1km" data-xp-reward="30"><label><input type="checkbox"><span>1km Run</span></label></li>
+                <li data-task-id="water_3l" data-xp-reward="5"><label><input type="checkbox"><span>Drink 3 Litres of Water</span></label></li>
             </ul>
         </section>
 
         <section class="supplements-routine">
             <h2>💊 Daily Supplements</h2>
             <ul id="supplementTaskList" class="checklist">
-                <li data-task-id="supplement_creatine"><label><input type="checkbox"><span>Take Creatine</span></label></li>
-                <li data-task-id="supplement_whey"><label><input type="checkbox"><span>Take Whey Protein</span></label></li>
-                <li data-task-id="supplement_mass_gainer"><label><input type="checkbox"><span>Take Mass Gainer</span></label></li>
+                <li data-task-id="supplement_creatine" data-xp-reward="5"><label><input type="checkbox"><span>Take Creatine</span></label></li>
+                <li data-task-id="supplement_whey" data-xp-reward="5"><label><input type="checkbox"><span>Take Whey Protein</span></label></li>
+                <li data-task-id="supplement_mass_gainer" data-xp-reward="5"><label><input type="checkbox"><span>Take Mass Gainer</span></label></li>
             </ul>
-        </section>
-
-        <section class="calorie-tracking-section">
-            <h2>🍖 Calorie Tracking</h2>
-            <p class="calories-display">Today's Calories: <span id="caloriesDisplay">0</span> / 3000 kcal</p>
-            <div class="calorie-input-group">
-                <input type="number" id="calorieInput" placeholder="Enter calories" step="1">
-                <button class="btn-base" id="saveCalorieBtn">Save Calories</button>
-            </div>
         </section>
         
         <section class="weekly-schedule">
@@ -114,35 +274,6 @@
             <div id="workout-plan-container"></div>
         </section>
 
-        <section class="weight-progress-section">
-            <h2>📈 Weight Progress</h2>
-            <p class="last-weight-display" id="lastWeightDisplay">Loading...</p>
-            <div class="weight-input-group">
-                <input type="number" id="currentWeightInput" placeholder="kg" step="0.1">
-                <button class="btn-base" id="saveWeightBtn">Save Weight</button>
-            </div>
-        </section>
-
-        <section class="streak-section">
-            <h2>🔥 Daily Quest Streak</h2>
-            <span id="currentStreak" class="streak-counter">0</span>
-            <div class="fire-container" id="fireContainer">
-                <div class="flame"></div><div class="flame"></div><div class="flame"></div><div class="flame"></div><div class="flame"></div>
-            </div>
-        </section>
-
-        <section class="beast-gate">
-             <h2>👹 Gate: Magic Beasts</h2>
-             <div id="beastsGrid" class="beasts-grid"></div>
-        </section>
-
-        <section class="calendar-section">
-            <h2>🗓️ Training Calendar</h2>
-            <div class="calendar-header">
-                <button id="prevMonth">&lt;</button><h3 id="currentMonthYear"></h3><button id="nextMonth">&gt;</button>
-            </div>
-            <div class="calendar-grid" id="calendarGrid"></div>
-        </section>
     </div>
 
     <script>
@@ -151,65 +282,46 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnYmFxc3BwZ3Fmb295aW15eWx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4NzgyMDMsImV4cCI6MjA2NzQ1NDIwM30.XAxyUgV_oVAqNvO0Nv-Cs-F9rJBP6N8nyJ_pCjW8TGg';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        let appState = {}, todaysLog = null, exercises = [], isShowingAllDays = false, currentCalendarDate = new Date();
+        const CURRENT_USER_ID = '00000000-0000-0000-0000-000000000000'; 
 
-        const userRankElement = document.getElementById('userRank');
+        let appState = {}, todaysLog = null, currentProfile = null, isShowingAllDays = false; 
+
+        const userTotalXpElement = document.getElementById('userTotalXp'); 
         const systemQuoteElement = document.getElementById('systemQuote');
-        const saveWeightBtn = document.getElementById('saveWeightBtn');
-        const lastWeightDisplay = document.getElementById('lastWeightDisplay');
-        const currentStreakElement = document.getElementById('currentStreak');
-        const beastsGrid = document.getElementById('beastsGrid');
-        const calendarGrid = document.getElementById('calendarGrid');
-        const currentMonthYearElement = document.getElementById('currentMonthYear');
         const toggleDayViewBtn = document.getElementById('toggleDayView');
         const workoutPlanContainer = document.getElementById('workout-plan-container');
-        const fireContainer = document.getElementById('fireContainer');
-        const saveCalorieBtn = document.getElementById('saveCalorieBtn');
-        const caloriesDisplay = document.getElementById('caloriesDisplay');
 
         const initializeApp = async () => {
             document.querySelector('.current-date').textContent = `🗓️ ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`;
-            const [state, log, fetchedExercises, quote, workoutPlan] = await Promise.all([
-                getAppState(), getOrCreateTodayLog(), getExercises(), getRandomQuote(), getWorkoutPlan()
+            
+            const [state, log, quote, workoutPlan, profile] = await Promise.all([
+                getAppState(),
+                getOrCreateTodayLog(),
+                getRandomQuote(),
+                getWorkoutPlan(),
+                getOrCreateProfile() 
             ]);
+
             appState = state;
             todaysLog = log;
-            exercises = fetchedExercises;
+            currentProfile = profile; 
             if (quote) systemQuoteElement.textContent = `"${quote.quote}"`;
 
-            renderFullWorkoutPlan(workoutPlan);
-            await loadTodaysProgress();
+            renderFullWorkoutPlan(workoutPlan); 
+            await loadTodaysProgress(); 
             
-            await displayUserRank();
-            await displayBeasts();
-            await calculateStreak();
+            displayTotalXp(); 
             
-            // FIX: Set the correct default view on page load
-            updateDayCardVisibility(false); // false = show today only
-            
-            renderCalendar(currentCalendarDate);
+            updateDayCardVisibility(false); 
             setupEventListeners();
         };
 
-        const getFireColor = (streak) => {
-            if (streak === 0) return { c1: '#581d00', c2: '#ff4000', duration: '3s' };
-            if (streak < 10) return { c1: '#ff4000', c2: '#ffc300', duration: '1s' };
-            if (streak < 30) return { c1: '#ffc300', c2: '#ffee00', duration: '0.8s' };
-            if (streak < 60) return { c1: '#0040ff', c2: '#00aaff', duration: '1.2s' };
-            if (streak < 90) return { c1: '#8A2BE2', c2: '#bd90f8', duration: '1s' };
-            return { c1: '#FFFFFF', c2: '#bd90f8', duration: '0.7s' };
-        };
-
-        const updateFireAnimation = (streak) => {
-            const colors = getFireColor(streak);
-            fireContainer.style.setProperty('--flame-color-1', colors.c1);
-            fireContainer.style.setProperty('--flame-color-2', colors.c2);
-            fireContainer.style.setProperty('--flame-duration', colors.duration);
-            fireContainer.style.opacity = streak > 0 ? 1 : 0.3;
-        };
-
         const getAppState = async () => {
-            const { data } = await supabaseClient.from('app_state').select('key, value');
+            const { data, error } = await supabaseClient.from('app_state').select('key, value');
+            if (error) {
+                console.error("Error fetching app state:", error);
+                return {};
+            }
             return (data || []).reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {});
         };
 
@@ -217,14 +329,45 @@
             const today = new Date().toISOString().slice(0, 10);
             let { data: log, error } = await supabaseClient.from('workout_logs').select('*').eq('log_date', today).single();
             if (log) return log;
-            if (error && error.code !== 'PGRST116') { console.error(error); return; } // Handle actual errors
-            const { data: newLog } = await supabaseClient.from('workout_logs').insert({ log_date: today }).select().single();
+            if (error && error.code !== 'PGRST116') { 
+                console.error("Error getting today's log:", error); 
+                return; 
+            } 
+            const { data: newLog, error: insertError } = await supabaseClient.from('workout_logs').insert({ log_date: today }).select().single();
+            if (insertError) {
+                console.error("Error creating today's log:", insertError);
+                return;
+            }
             return newLog;
         };
         
-        const getExercises = async () => (await supabaseClient.from('exercises').select('*')).data || [];
-        const getRandomQuote = async () => (await supabaseClient.rpc('get_random_quote')).data?.[0] || null;
-        const getWorkoutPlan = async () => (await supabaseClient.from('workout_plan_exercises').select('*').order('display_order')).data || [];
+        const getRandomQuote = async () => {
+            const { data, error } = await supabaseClient.rpc('get_random_quote');
+            if (error) {
+                console.error("Error fetching random quote:", error);
+                return null;
+            }
+            return data?.[0] || null;
+        };
+
+        const getWorkoutPlan = async () => {
+            const { data, error } = await supabaseClient
+                .from('workout_plan_exercises')
+                .select(`
+                    *,
+                    exercises(id) 
+                `) 
+                .order('day_of_week, display_order');
+
+            if (error) {
+                console.error("Error fetching workout plan:", error);
+                return [];
+            }
+            return data.map(item => ({
+                ...item,
+                exercise_id: (item.exercises && item.exercises.id !== null) ? item.exercises.id : null 
+            }));
+        };
 
         const renderFullWorkoutPlan = (plan) => {
             const groupedPlan = plan.reduce((acc, item) => {
@@ -235,172 +378,291 @@
 
             let html = '';
             const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            
+            const todayIndex = new Date().getDay();
+            const currentDayString = daysOrder[todayIndex]; 
+
             daysOrder.forEach(day => {
-                html += `<div class="day-card" id="${day}"><h3>📅 ${day.charAt(0).toUpperCase() + day.slice(1)}</h3><div class="workout-details">`;
-                if (groupedPlan[day]) {
+                // The class assignment for 'active-day' correctly happens here in render,
+                // and its display is controlled by updateDayCardVisibility.
+                const isActiveDay = day === currentDayString; // Set active class based on actual current day
+                html += `<div class="day-card ${isActiveDay ? 'active-day' : ''}" id="${day}"><h3>📅 ${day.charAt(0).toUpperCase() + day.slice(1)}</h3><div class="workout-details">`;
+                
+                if (groupedPlan[day] && Object.keys(groupedPlan[day]).length > 0) { 
                     Object.keys(groupedPlan[day]).forEach(category => {
                         html += `<h4>${category}</h4><ul>`;
                         groupedPlan[day][category].forEach(ex => {
-                            const exerciseId = exercises.find(e => e.name === ex.exercise_name)?.id || '';
-                            html += `<li data-exercise-id="${exerciseId}"><label><span>${ex.exercise_name}</span></label><div class="workout-exercise-details">Target: ${ex.target_sets} sets of ${ex.target_reps} reps ${ex.notes ? `(${ex.notes})` : ''}</div><div class="exercise-log-inputs"><input type="number" data-type="weight" placeholder="kg"><input type="number" data-type="sets" placeholder="sets"><input type="number" data-type="reps" placeholder="reps"></div></li>`;
+                            const exerciseId = ex.exercise_id || ''; 
+                            let notesHtml = '';
+                            if (ex.notes) {
+                                const noteItems = ex.notes.split('. ').filter(n => n.trim() !== '');
+                                if (noteItems.length > 0) {
+                                    notesHtml = `<ul>${noteItems.map(item => `<li>${item.trim()}</li>`).join('')}</ul>`;
+                                }
+                            }
+                            
+                            const inputsHtml = exerciseId ? `
+                                <div class="exercise-log-inputs">
+                                    <input type="number" data-type="weight" placeholder="kg">
+                                    <input type="number" data-type="sets" placeholder="sets">
+                                    <input type="number" data-type="reps" placeholder="reps">
+                                </div>
+                            ` : '';
+
+                            const targetDisplay = (ex.target_sets !== null || ex.target_reps !== null) ?
+                                `Target: ${ex.target_sets !== null ? `${ex.target_sets} sets` : ''} ${ex.target_reps !== null ? `of ${ex.target_reps} reps` : ''}`
+                                : '';
+
+                            html += `<li ${exerciseId ? `data-exercise-id="${exerciseId}"` : ''}>
+                                        <div class="exercise-item-header">
+                                            <input type="checkbox" id="exercise-check-${day}-${ex.id}"> 
+                                            <label for="exercise-check-${day}-${ex.id}"><span>${ex.exercise_name}</span></label>
+                                        </div>
+                                        <div class="workout-exercise-details">
+                                            ${targetDisplay}
+                                            ${notesHtml} 
+                                        </div>
+                                        ${inputsHtml}
+                                      </li>`;
                         });
                         html += `</ul>`;
                     });
+                } else {
+                    html += `<p>No workouts planned for ${day.charAt(0).toUpperCase() + day.slice(1)}.</p>`;
                 }
                 html += `</div></div>`;
             });
             workoutPlanContainer.innerHTML = html;
+            // After rendering, ensure the correct day is shown based on initial visibility state
+            // This is called from initializeApp, which then calls updateDayCardVisibility.
+            // No direct display manipulation here.
         };
 
         const loadTodaysProgress = async () => {
-            if (!todaysLog) return;
-            const { data: completedTasks } = await supabaseClient.from('completed_tasks_log').select('task_name').eq('log_date', todaysLog.log_date);
+            if (!todaysLog) return; 
+            
+            const { data: completedTasks, error: taskError } = await supabaseClient.from('completed_tasks_log').select('task_name').eq('log_date', todaysLog.log_date);
+            if (taskError) { console.error("Error fetching completed tasks:", taskError); return; }
             const completedTaskSet = new Set((completedTasks || []).map(t => t.task_name));
-            document.querySelectorAll('.checklist li').forEach(li => {
+            
+            document.querySelectorAll('#dailyTaskList li, #supplementTaskList li').forEach(li => {
                 const checkbox = li.querySelector('input[type="checkbox"]');
-                checkbox.checked = completedTaskSet.has(li.dataset.taskId);
-                li.classList.toggle('completed', checkbox.checked);
-            });
-            const { data: exerciseLogs } = await supabaseClient.from('exercise_logs').select('*').eq('log_date', todaysLog.log_date);
-            document.querySelectorAll('.workout-details li').forEach(li => {
-                const log = (exerciseLogs || []).find(l => l.exercise_id == li.dataset.exerciseId);
-                if (log) {
-                    li.querySelector('input[data-type="weight"]').value = log.weight_kg;
-                    li.querySelector('input[data-type="sets"]').value = log.sets;
-                    li.querySelector('input[data-type="reps"]').value = log.reps;
+                if (li.dataset.taskId && checkbox) {
+                    checkbox.checked = completedTaskSet.has(li.dataset.taskId);
+                    li.classList.toggle('completed', checkbox.checked);
                 }
             });
-            lastWeightDisplay.textContent = appState.current_weight_kg > 0 ? `Last Recorded: ${appState.current_weight_kg} kg` : 'No weight recorded.';
-            caloriesDisplay.textContent = todaysLog.calories_eaten || 0; // Load calories
+
+            const { data: exerciseLogs, error: exerciseLogError } = await supabaseClient.from('exercise_logs').select('*').eq('log_date', todaysLog.log_date);
+            if (exerciseLogError) { console.error("Error fetching exercise logs:", exerciseLogError); return; }
+
+            document.querySelectorAll('.workout-details li').forEach(li => {
+                const exerciseId = li.dataset.exerciseId;
+                if (!exerciseId) {
+                    return; 
+                }
+                const log = (exerciseLogs || []).find(l => String(l.exercise_id) === String(exerciseId)); 
+                if (log) {
+                    li.querySelector('input[data-type="weight"]').value = log.weight_kg !== null ? log.weight_kg : '';
+                    li.querySelector('input[data-type="sets"]').value = log.sets !== null ? log.sets : '';
+                    li.querySelector('input[data-type="reps"]').value = log.reps !== null ? log.reps : '';
+                } else {
+                    li.querySelector('input[data-type="weight"]').value = '';
+                    li.querySelector('input[data-type="sets"]').value = '';
+                    li.querySelector('input[data-type="reps"]').value = '';
+                }
+            });
         };
         
+        const getOrCreateProfile = async () => {
+            let { data: profile, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', CURRENT_USER_ID)
+                .single();
+
+            if (profile) return profile;
+
+            if (error && error.code !== 'PGRST116') { 
+                console.error("Error fetching profile:", error);
+                return null;
+            }
+            
+            const { data: newProfile, error: insertError } = await supabaseClient
+                .from('profiles')
+                .insert({ id: CURRENT_USER_ID, total_xp: 0, rank: 'E-Rank' })
+                .select('*')
+                .single();
+            
+            if (insertError) {
+                console.error("Error creating profile:", insertError);
+                return null;
+            }
+            return newProfile;
+        };
+
+        const displayTotalXp = () => {
+            if (currentProfile) {
+                userTotalXpElement.textContent = `Total XP: ${currentProfile.total_xp}`;
+            } else {
+                userTotalXpElement.textContent = `Total XP: N/A`;
+            }
+        };
+
+        const addXpToProfile = async (xpAmount) => {
+            if (!currentProfile) {
+                console.error("No profile loaded to add XP to.");
+                return;
+            }
+            const newXp = currentProfile.total_xp + xpAmount;
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .update({ total_xp: newXp, updated_at: new Date().toISOString() })
+                .eq('id', CURRENT_USER_ID)
+                .select('*')
+                .single();
+
+            if (error) {
+                console.error("Error updating XP:", error);
+            } else {
+                currentProfile = data; 
+                displayTotalXp(); 
+                console.log(`XP Added! New Total XP: ${currentProfile.total_xp}`);
+            }
+        };
+
+
         const logTaskCompletion = async (taskId, isCompleted) => {
-            const record = { log_date: todaysLog.log_date, task_name: taskId };
-            if (isCompleted) await supabaseClient.from('completed_tasks_log').insert(record);
-            else await supabaseClient.from('completed_tasks_log').delete().match(record);
+            const today = new Date().toISOString().slice(0, 10);
+            const record = { log_date: today, task_name: taskId };
+            const listItem = document.querySelector(`li[data-task-id="${taskId}"]`);
+            const xpReward = parseInt(listItem.dataset.xpReward || '0', 10);
+
+            if (isCompleted) {
+                const { error: insertError } = await supabaseClient.from('completed_tasks_log').insert(record);
+                if (insertError) {
+                    console.error("Error inserting completed task:", insertError);
+                    return;
+                }
+                await addXpToProfile(xpReward); 
+            } else {
+                const { error: deleteError } = await supabaseClient.from('completed_tasks_log').delete().match(record);
+                if (deleteError) {
+                    console.error("Error deleting completed task:", deleteError);
+                    return;
+                }
+                await addXpToProfile(-xpReward); 
+            }
+            
+            listItem.classList.toggle('completed', isCompleted);
             await checkDailyQuestCompletion();
         };
 
         const checkDailyQuestCompletion = async () => {
-            const allTasks = document.querySelectorAll('#dailyTaskList input, #supplementTaskList input');
+            const allTasks = document.querySelectorAll('#dailyTaskList input[type="checkbox"], #supplementTaskList input[type="checkbox"]');
             const allDone = Array.from(allTasks).every(cb => cb.checked);
+
             if (todaysLog.all_tasks_completed !== allDone) {
-                 await supabaseClient.from('workout_logs').update({ all_tasks_completed: allDone }).eq('log_date', todaysLog.log_date);
-                 todaysLog.all_tasks_completed = allDone;
-                 if (allDone) {
-                     await calculateStreak();
-                     renderCalendar(currentCalendarDate);
-                 }
+                const { error } = await supabaseClient.from('workout_logs').update({ all_tasks_completed: allDone }).eq('log_date', todaysLog.log_date);
+                if (error) { console.error("Error updating workout log completion:", error); return; }
+                
+                todaysLog.all_tasks_completed = allDone; 
             }
         };
 
         const logExercisePerformance = async (liElement) => {
-             const exerciseId = liElement.dataset.exerciseId;
-             if (!exerciseId) return;
-             const weight = parseFloat(liElement.querySelector('input[data-type="weight"]').value);
-             const sets = parseInt(liElement.querySelector('input[data-type="sets"]').value, 10);
-             const reps = parseInt(liElement.querySelector('input[data-type="reps"]').value, 10);
-             const performanceData = { log_date: todaysLog.log_date, exercise_id: exerciseId, weight_kg: isNaN(weight) ? null : weight, sets: isNaN(sets) ? null : sets, reps: isNaN(reps) ? null : reps };
-             await supabaseClient.from('exercise_logs').upsert(performanceData, { onConflict: 'log_date, exercise_id' });
-        };
-        
-        const saveBodyWeight = async (weight) => {
-            if (isNaN(weight) || weight <= 0) return;
-            await Promise.all([
-                supabaseClient.from('weight_logs').upsert({ log_date: todaysLog.log_date, weight_kg: weight }),
-                supabaseClient.from('app_state').update({ value: weight }).eq('key', 'current_weight_kg')
-            ]);
-            appState.current_weight_kg = weight;
-            lastWeightDisplay.textContent = `Last Recorded: ${weight} kg`;
-        };
-
-        const saveCalories = async (calories) => {
-            if (isNaN(calories) || calories < 0) return;
-            const { error } = await supabaseClient.from('workout_logs').update({ calories_eaten: calories }).eq('log_date', todaysLog.log_date);
-            if (!error) {
-                todaysLog.calories_eaten = calories;
-                caloriesDisplay.textContent = calories;
-                document.getElementById('calorieInput').value = '';
+            const exerciseId = liElement.dataset.exerciseId;
+            if (!exerciseId) {
+                return;
             }
-        };
 
-        const calculateStreak = async () => {
-            const { data } = await supabaseClient.from('workout_logs').select('log_date, all_tasks_completed').order('log_date', { ascending: false });
-            let streak = 0;
-            if (data?.length) {
-                const now = new Date();
-                const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-                for (let i = 0; i < data.length; i++) {
-                    const expectedDateUTC = new Date(todayUTC);
-                    expectedDateUTC.setUTCDate(todayUTC.getUTCDate() - i);
-                    const logDateUTC = new Date(data[i].log_date + 'T00:00:00Z');
-                    if (logDateUTC.getTime() === expectedDateUTC.getTime() && data[i].all_tasks_completed) {
-                        streak++;
-                    } else break;
+            const weightInput = liElement.querySelector('input[data-type="weight"]');
+            const setsInput = liElement.querySelector('input[data-type="sets"]');
+            const repsInput = liElement.querySelector('input[data-type="reps"]');
+
+            const weight = parseFloat(weightInput.value);
+            const sets = parseInt(setsInput.value, 10);
+            const reps = parseInt(repsInput.value, 10);
+
+            if (isNaN(weight) && isNaN(sets) && isNaN(reps)) {
+                const { error } = await supabaseClient.from('exercise_logs')
+                    .delete()
+                    .match({ log_date: todaysLog.log_date, exercise_id: exerciseId });
+                if (error && error.code !== 'PGRST116') { 
+                    console.error("Error deleting empty exercise log:", error);
                 }
+                return; 
             }
-            currentStreakElement.textContent = streak;
-            updateFireAnimation(streak);
-            await supabaseClient.from('app_state').update({ value: streak }).eq('key', 'current_streak');
-            appState.current_streak = streak;
-        };
-        
-        const displayUserRank = async () => {
-            const { data } = await supabaseClient.from('ranks').select('name').eq('id', appState.current_rank_id || 1).single();
-            userRankElement.textContent = data ? data.name : 'E-Rank';
-        };
 
-        const displayBeasts = async () => {
-            const { data } = await supabaseClient.from('beasts').select(`*, ranks (id, name)`).order('id');
-            beastsGrid.innerHTML = '';
-            const userRankId = parseInt(appState.current_rank_id, 10) || 1;
-            (data || []).forEach(beast => {
-                const canAttack = userRankId >= beast.ranks.id;
-                beastsGrid.insertAdjacentHTML('beforeend', `<div class="beast-card"><img src="${beast.image_url}" alt="${beast.name}"><h3>${beast.name}</h3><p class="beast-rank">${beast.ranks.name}</p><button class="btn-base btn-attack" data-beast-id="${beast.id}" ${canAttack ? '' : 'disabled'}>${canAttack ? 'Attack' : 'Rank Too Low'}</button></div>`);
-            });
+            const performanceData = { 
+                log_date: todaysLog.log_date, 
+                exercise_id: exerciseId, 
+                weight_kg: isNaN(weight) ? null : weight, 
+                sets: isNaN(sets) ? null : sets, 
+                reps: isNaN(reps) ? null : reps 
+            };
+
+            const { error } = await supabaseClient.from('exercise_logs').upsert(performanceData, { onConflict: 'log_date, exercise_id' });
+            if (error) { console.error("Error logging exercise performance:", error); }
         };
         
         const setupEventListeners = () => {
-            document.querySelectorAll('.checklist').forEach(list => list.addEventListener('change', e => {
-                if (e.target.matches('input[type="checkbox"]')) logTaskCompletion(e.target.closest('li').dataset.taskId, e.target.checked);
-            }));
+            // General checklist items (Daily Quest, Supplements)
+            document.querySelectorAll('#dailyTaskList input[type="checkbox"], #supplementTaskList input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const listItem = checkbox.closest('li');
+                    logTaskCompletion(listItem.dataset.taskId, checkbox.checked);
+                });
+            });
+
+            // Workout plan exercise input fields (weight, sets, reps)
             workoutPlanContainer.addEventListener('change', e => {
-                if (e.target.matches('.exercise-log-inputs input')) logExercisePerformance(e.target.closest('li'));
+                if (e.target.matches('.exercise-log-inputs input')) {
+                    logExercisePerformance(e.target.closest('li'));
+                }
             });
-            saveWeightBtn.addEventListener('click', () => saveBodyWeight(parseFloat(document.getElementById('currentWeightInput').value)));
-            saveCalorieBtn.addEventListener('click', () => saveCalories(parseInt(document.getElementById('calorieInput').value, 10)));
-            beastsGrid.addEventListener('click', e => {
-                 if (e.target.matches('.btn-attack:not([disabled])')) supabaseClient.from('combat_logs').insert({ beast_id: e.target.dataset.beastId });
+
+            // Workout plan exercise checkboxes (to mark as completed in UI and potentially trigger XP)
+            workoutPlanContainer.addEventListener('change', e => {
+                if (e.target.matches('.exercise-item-header input[type="checkbox"]')) {
+                    const listItem = e.target.closest('li');
+                    // Toggle 'completed' class for visual feedback
+                    listItem.classList.toggle('completed', e.target.checked);
+                    // If you want to log this to completed_tasks_log or add XP,
+                    // you would need a data-task-id or similar on these list items too,
+                    // and then call logTaskCompletion for them.
+                    // For now, it's just visual.
+                }
             });
-            document.getElementById('prevMonth').addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1); renderCalendar(currentCalendarDate); });
-            document.getElementById('nextMonth').addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1); renderCalendar(currentCalendarDate); });
-            toggleDayViewBtn.addEventListener('click', () => updateDayCardVisibility(isShowingAllDays));
+
+
+            toggleDayViewBtn.addEventListener('click', () => updateDayCardVisibility(true)); 
         };
         
-        const updateDayCardVisibility = (toggle = true) => {
-            if (toggle) isShowingAllDays = !isShowingAllDays;
-            const currentDayId = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][new Date().getDay()];
-            document.querySelectorAll('.day-card').forEach(card => card.classList.remove('active-day'));
-            document.getElementById(currentDayId)?.classList.add('active-day');
-            document.body.classList.toggle('show-all-days', isShowingAllDays);
-            toggleDayViewBtn.textContent = isShowingAllDays ? 'Show Today Only' : 'Show All Days';
-        };
+        const updateDayCardVisibility = (toggle = false) => {
+            const todayIndex = new Date().getDay(); 
+            const daysOfWeekMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const currentDayString = daysOfWeekMap[todayIndex];
 
-        const renderCalendar = async (date) => {
-            const year = date.getFullYear(), month = date.getMonth();
-            currentMonthYearElement.textContent = date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-            const { data } = await supabaseClient.from('workout_logs').select('log_date').eq('all_tasks_completed', true).gte('log_date', `${year}-${String(month + 1).padStart(2, '0')}-01`).lte('log_date', `${year}-${String(month + 1).padStart(2, '0')}-31`);
-            const trainedDays = new Set((data || []).map(d => new Date(d.log_date+'T00:00:00Z').getUTCDate()));
-            let gridHTML = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(name => `<div class="day-name">${name}</div>`).join('');
-            const firstDayOfMonth = new Date(year, month, 1).getDay();
-            for (let i = 0; i < firstDayOfMonth; i++) gridHTML += `<div class="calendar-day empty"></div>`;
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
-            for (let day = 1; day <= daysInMonth; day++) {
-                const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-                gridHTML += `<div class="calendar-day ${isToday ? 'today' : ''} ${trainedDays.has(day) ? 'trained' : ''}">${day}</div>`;
+            if (toggle) { 
+                isShowingAllDays = !isShowingAllDays;
             }
-            calendarGrid.innerHTML = gridHTML;
+            
+            document.querySelectorAll('.day-card').forEach(card => {
+                card.classList.remove('active-day'); 
+                if (!isShowingAllDays) {
+                    if (card.id === currentDayString) { 
+                        card.style.display = ''; 
+                        card.classList.add('active-day');
+                    } else {
+                        card.style.display = 'none'; 
+                    }
+                } else {
+                    card.style.display = ''; 
+                }
+            });
+            document.body.classList.toggle('show-all-days', isShowingAllDays); 
+            toggleDayViewBtn.textContent = isShowingAllDays ? 'Show Today Only' : 'Show All Days';
         };
         
         initializeApp();
