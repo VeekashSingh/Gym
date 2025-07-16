@@ -155,7 +155,6 @@
             color: var(--color-light-grey); 
             flex-grow: 1; 
         }
-        /* Checkbox styling */
         input[type="checkbox"] { 
             appearance: none; 
             width: 22px; 
@@ -308,7 +307,7 @@
             if (quote) systemQuoteElement.textContent = `"${quote.quote}"`;
 
             renderFullWorkoutPlan(workoutPlan); 
-            await loadTodaysProgress(); 
+            await loadTodaysProgress(); // This is where the state is loaded from DB
             
             displayTotalXp(); 
             
@@ -383,9 +382,7 @@
             const currentDayString = daysOrder[todayIndex]; 
 
             daysOrder.forEach(day => {
-                // The class assignment for 'active-day' correctly happens here in render,
-                // and its display is controlled by updateDayCardVisibility.
-                const isActiveDay = day === currentDayString; // Set active class based on actual current day
+                const isActiveDay = day === currentDayString; 
                 html += `<div class="day-card ${isActiveDay ? 'active-day' : ''}" id="${day}"><h3>📅 ${day.charAt(0).toUpperCase() + day.slice(1)}</h3><div class="workout-details">`;
                 
                 if (groupedPlan[day] && Object.keys(groupedPlan[day]).length > 0) { 
@@ -413,10 +410,10 @@
                                 `Target: ${ex.target_sets !== null ? `${ex.target_sets} sets` : ''} ${ex.target_reps !== null ? `of ${ex.target_reps} reps` : ''}`
                                 : '';
 
-                            html += `<li ${exerciseId ? `data-exercise-id="${exerciseId}"` : ''}>
+                            html += `<li ${exerciseId ? `data-exercise-id="${exerciseId}"` : ''} data-workout-plan-id="${ex.id}">
                                         <div class="exercise-item-header">
-                                            <input type="checkbox" id="exercise-check-${day}-${ex.id}"> 
-                                            <label for="exercise-check-${day}-${ex.id}"><span>${ex.exercise_name}</span></label>
+                                            <input type="checkbox" id="workout-check-${ex.id}"> 
+                                            <label for="workout-check-${ex.id}"><span>${ex.exercise_name}</span></label>
                                         </div>
                                         <div class="workout-exercise-details">
                                             ${targetDisplay}
@@ -433,43 +430,104 @@
                 html += `</div></div>`;
             });
             workoutPlanContainer.innerHTML = html;
-            // After rendering, ensure the correct day is shown based on initial visibility state
-            // This is called from initializeApp, which then calls updateDayCardVisibility.
-            // No direct display manipulation here.
         };
 
         const loadTodaysProgress = async () => {
-            if (!todaysLog) return; 
-            
-            const { data: completedTasks, error: taskError } = await supabaseClient.from('completed_tasks_log').select('task_name').eq('log_date', todaysLog.log_date);
-            if (taskError) { console.error("Error fetching completed tasks:", taskError); return; }
+            if (!todaysLog) {
+                console.warn("loadTodaysProgress: No daily log found for today.");
+                return;
+            }
+            const todayDateString = todaysLog.log_date; // Use the exact log_date from today's log
+
+            // --- Load Daily Quest & Supplement Task Completions ---
+            const { data: completedTasks, error: taskError } = await supabaseClient
+                .from('completed_tasks_log')
+                .select('task_name')
+                .eq('log_date', todayDateString);
+
+            if (taskError) {
+                console.error("Error fetching completed daily tasks:", taskError);
+                return;
+            }
             const completedTaskSet = new Set((completedTasks || []).map(t => t.task_name));
-            
+            console.log("Completed Daily/Supplement Tasks from DB:", Array.from(completedTaskSet));
+
             document.querySelectorAll('#dailyTaskList li, #supplementTaskList li').forEach(li => {
                 const checkbox = li.querySelector('input[type="checkbox"]');
-                if (li.dataset.taskId && checkbox) {
-                    checkbox.checked = completedTaskSet.has(li.dataset.taskId);
-                    li.classList.toggle('completed', checkbox.checked);
+                const taskId = li.dataset.taskId;
+                if (taskId && checkbox) {
+                    if (completedTaskSet.has(taskId)) {
+                        checkbox.checked = true;
+                        li.classList.add('completed');
+                        console.log(`Task '${taskId}' loaded as completed.`);
+                    } else {
+                        checkbox.checked = false;
+                        li.classList.remove('completed');
+                        console.log(`Task '${taskId}' loaded as incomplete.`);
+                    }
                 }
             });
 
-            const { data: exerciseLogs, error: exerciseLogError } = await supabaseClient.from('exercise_logs').select('*').eq('log_date', todaysLog.log_date);
-            if (exerciseLogError) { console.error("Error fetching exercise logs:", exerciseLogError); return; }
+            // --- Load Workout Plan Exercise Performance (weight/sets/reps) ---
+            const { data: exerciseLogs, error: exerciseLogError } = await supabaseClient
+                .from('exercise_logs')
+                .select('*')
+                .eq('log_date', todayDateString);
+
+            if (exerciseLogError) {
+                console.error("Error fetching exercise logs:", exerciseLogError);
+                return;
+            }
+            console.log("Exercise Logs for today from DB:", exerciseLogs);
 
             document.querySelectorAll('.workout-details li').forEach(li => {
                 const exerciseId = li.dataset.exerciseId;
+                const workoutPlanId = li.dataset.workoutPlanId; // Use this ID if you want to also mark checkbox
+                
                 if (!exerciseId) {
+                    // console.warn(`Workout plan item without data-exercise-id: ${li.textContent}. Skipping exercise log load.`);
                     return; 
                 }
+
+                // Find the log entry matching this exercise ID for today
                 const log = (exerciseLogs || []).find(l => String(l.exercise_id) === String(exerciseId)); 
+
+                const weightInput = li.querySelector('input[data-type="weight"]');
+                const setsInput = li.querySelector('input[data-type="sets"]');
+                const repsInput = li.querySelector('input[data-type="reps"]');
+                const workoutCheckbox = li.querySelector(`#workout-check-${workoutPlanId}`); // Use the specific ID
+
                 if (log) {
-                    li.querySelector('input[data-type="weight"]').value = log.weight_kg !== null ? log.weight_kg : '';
-                    li.querySelector('input[data-type="sets"]').value = log.sets !== null ? log.sets : '';
-                    li.querySelector('input[data-type="reps"]').value = log.reps !== null ? log.reps : '';
+                    // Fill input fields
+                    if (weightInput) weightInput.value = log.weight_kg !== null ? log.weight_kg : '';
+                    if (setsInput) setsInput.value = log.sets !== null ? log.sets : '';
+                    if (repsInput) repsInput.value = log.reps !== null ? log.reps : '';
+                    
+                    // Mark workout checkbox/li as completed if data is present (optional logic)
+                    if (workoutCheckbox) {
+                        // Define 'completion' for a workout plan exercise. 
+                        // E.g., if all weight/sets/reps are not null, or just if a log entry exists.
+                        const isLogged = (log.weight_kg !== null && log.sets !== null && log.reps !== null);
+                        if (isLogged) {
+                             workoutCheckbox.checked = true;
+                             li.classList.add('completed');
+                             console.log(`Workout exercise '${li.querySelector('span').textContent}' loaded as logged.`);
+                        } else {
+                             workoutCheckbox.checked = false;
+                             li.classList.remove('completed');
+                             console.log(`Workout exercise '${li.querySelector('span').textContent}' loaded as incomplete (partially logged).`);
+                        }
+                    }
                 } else {
-                    li.querySelector('input[data-type="weight"]').value = '';
-                    li.querySelector('input[data-type="sets"]').value = '';
-                    li.querySelector('input[data-type="reps"]').value = '';
+                    // Clear inputs if no log exists for this exercise today
+                    if (weightInput) weightInput.value = '';
+                    if (setsInput) setsInput.value = '';
+                    if (repsInput) repsInput.value = '';
+                    if (workoutCheckbox) {
+                        workoutCheckbox.checked = false;
+                        li.classList.remove('completed');
+                    }
+                    console.log(`No log for workout exercise '${li.querySelector('span').textContent}'.`);
                 }
             });
         };
@@ -622,19 +680,17 @@
                 }
             });
 
-            // Workout plan exercise checkboxes (to mark as completed in UI and potentially trigger XP)
+            // Workout plan exercise checkboxes (to mark as completed in UI)
+            // Note: These now have IDs like workout-check-ID for easier selection
             workoutPlanContainer.addEventListener('change', e => {
                 if (e.target.matches('.exercise-item-header input[type="checkbox"]')) {
                     const listItem = e.target.closest('li');
-                    // Toggle 'completed' class for visual feedback
                     listItem.classList.toggle('completed', e.target.checked);
-                    // If you want to log this to completed_tasks_log or add XP,
-                    // you would need a data-task-id or similar on these list items too,
-                    // and then call logTaskCompletion for them.
-                    // For now, it's just visual.
+                    // You would add database logging here if you want to track individual exercise completion.
+                    // For example, you could also add XP for these if completed.
+                    // You'd need to define a taskId for them or a new logging mechanism.
                 }
             });
-
 
             toggleDayViewBtn.addEventListener('click', () => updateDayCardVisibility(true)); 
         };
